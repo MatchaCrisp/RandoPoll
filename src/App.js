@@ -6,15 +6,22 @@ import Survey from './components/Survey';
   receives current poll JSON and renders header, <graph />, <survey />, footer
 */
 const App =()=> {
-  const [poll,setPoll] = useState({"title":"", "res":{}})
-  const [surv,setSurv] = useState({"title":"", "ops":[]})
+  // where data to the graph display is stored
+  const [poll,setPoll] = useState({"title":"", "type":"", "res":{}})
+  // where data to the survey form is stored
+  const [surv,setSurv] = useState({"title":"", "questions":[]})
   useEffect(() => {
+    // fetch poll data
     fetch('/poll').then(res => res.json()).then(data => {
-      setPoll(data.poll);
-      setSurv({
-        "title":data.poll.title,
-        "ops":Object.keys(data.poll.res)
-      });
+      const newPoll = {};
+      newPoll.title=data.poll.title;
+      newPoll.res=data.poll.res;
+      newPoll.type=data.poll.type;
+      setPoll(newPoll);
+      const newSurv={};
+      newSurv.title=data.poll.title;
+      newSurv.questions=data.poll.questions;
+      setSurv(newSurv);
     });
   }, []);
 

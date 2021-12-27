@@ -15,6 +15,8 @@ def poll():
     if request.method=="GET":
         # TODO: find relevant dataset in database and return
 
+        # sample data structure with sample data
+        # TODO: add required key for required
         dataPack={
             "poll":{
                 "title":"Vanilla or Chocolate Ice Cream?",
@@ -24,14 +26,38 @@ def poll():
                     "Chocolate":"11",
                     "Other flavor":"5",
                     "Not a fan of ice cream":"3"
-                }
+                },
+                "questions":[
+                        {"questionName":"fav_cream",
+                        "questionOptions":{
+                            "op1_vanilla":{
+                                "dispMsg":"Vanilla",
+                                "inputType":"radio",
+                                "inputVal":"vani"},
+                            "op2_chocolate":{
+                                "dispMsg":"Chocolate",
+                                "inputType":"radio",
+                                "inputVal":"choc"},
+                            "op3_other":{
+                                "dispMsg":"Other flavor",
+                                "inputType":"radio",
+                                "inputVal":"othe"},
+                            "op4_nothing":{
+                                "dispMsg":"Not a fan of ice cream",
+                                "inputType":"radio",
+                                "inputVal":"non"}
+                            },
+                        "questionReq":True
+                        }
+                      ]
             }
         }
         return dataPack
     # case of user submitting input
     else:
         # TODO: sanitize and validate user input
-        return None
+        print(request.json)
+        return {"registered":True}
         # TODO: return relevant error message in case of wrong input
 
         # TODO: return affirmative message with valid input

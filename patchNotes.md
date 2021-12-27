@@ -1,0 +1,25 @@
+# Patch Notes
+
+"Transparency is the foundation to greatness, and all quotes on the internet are to be believed." - Genghis Khan
+
+## December 25 2021: Christmas woes
+One of the most disappointing feeling, is when you recognize your biggest weakness, yet it still creeps up on you and destroys you. My fear of failure often keeps me locked from making decent progress on any project. This is often despite me logically knowing that once I start, I can do it. Before I know it, I am days away from years end and somehow not even a quarter through my project.
+
+previous to this, main difficulty was not knowing the ordinal axis in d3, resulting in numerous unnecessary lines of code to achieve the same result. 
+- resolved levitating y axis (wrong padding subtracted)
+- removed line-based gridlines, added tick-based gridlines
+- installed react-hook-form
+- data structure of survey data revised 1 
+- dynamic construction of form (INCOMPLETE, suspect wrong interpretation of survey data structure)
+
+## December 26 2021: Cakes
+Holiday seasons are often the busiest, even during the pandemic. Being a hermit with most of his daily vitamin D quota fulfilled via supplements, I still exchanged many holiday greetings and gifts. Weather wasn't too bad either, overall a good day.
+
+- resolved no form generated (wrong interpretation of survey data structure)
+- revised data structure 2 (to include necessary data per input)
+- revised data structure 3 (revise to a name-based object form instead of input id, making it per question)
+- revised data structure 4 (included a required attribute for the input)
+- added frontend data validation
+- added simple submission lock (useless upon refresh)
+- added POST to flask backend
+- TODO: refactor/cleanup
