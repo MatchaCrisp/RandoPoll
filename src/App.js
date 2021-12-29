@@ -12,15 +12,23 @@ const App =()=> {
   const [surv,setSurv] = useState({"title":"", "questions":[]})
   useEffect(() => {
     // fetch poll data
-    fetch('/poll').then(res => res.json()).then(data => {
+    fetch('/poll').then(res => res.json()).then(({poll}) => {
+      console.log(poll)
       const newPoll = {};
-      newPoll.title=data.poll.title;
-      newPoll.res=data.poll.res;
-      newPoll.type=data.poll.type;
+      newPoll.pollId=poll.pollId;
+      newPoll.title=poll.title;
+      newPoll.res=poll.res;
+      newPoll.type=poll.type;
       setPoll(newPoll);
+    });
+    //fetch surv questions
+    // TODO: when login/cookie implemented, only fetch when user never submitted before
+    fetch('/surv').then(res=>res.json()).then(({surv})=>{
+      console.log(surv);
       const newSurv={};
-      newSurv.title=data.poll.title;
-      newSurv.questions=data.poll.questions;
+      newSurv.pollId=surv.pollId;
+      newSurv.title=surv.title;
+      newSurv.questions=surv.questions;
       setSurv(newSurv);
     });
   }, []);

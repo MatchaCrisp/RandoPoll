@@ -114,10 +114,10 @@ const Survey=({surv})=>{
             const userData = {
                 method: 'POST',
                 headers: { 'Content-type':'application/json'},
-                body: JSON.stringify(data)
+                body: JSON.stringify({...data, "pollId":surv.pollId})
             };
             // change into waiting state
-            fetch('/poll', userData)
+            fetch('/submitSurv', userData)
                 .then(response=>response.json())
                 .then(data=>{
                     console.log(data);

@@ -23,3 +23,23 @@ Holiday seasons are often the busiest, even during the pandemic. Being a hermit 
 - added simple submission lock (useless upon refresh)
 - added POST to flask backend
 - TODO: refactor/cleanup
+
+## December 27 2021: Yer a lizard, 'arry
+Time flies like Harry on a broomstick
+
+- split /poll api into 3: 
+ - /poll (for only poll result at time of fetch)
+ - /surv (for survey questions)
+ - /submitSurv (POST, for user submission)
+- added pollId to datapack so user submission can be properly entered
+- start db connection to postgres
+
+## December 28 2021: SQL
+How to store data of unknown format well into a RDBMS?
+
+- implement dbworks class as postgresql connector
+- stored all sensitive information in separate ini file (updated gitignore)
+- implemented dbworks methods that dynamically create needed tables and rows (to be tested)
+- TODO: gather table/row creating methods in dbworks into one
+- TODO: finish dbworks insert user input method
+- TODO: use actual data from SQL instead of dummy in app.py
