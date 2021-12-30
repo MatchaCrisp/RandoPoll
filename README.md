@@ -20,10 +20,11 @@ This is a web application with the goal of publishing a survey every week, along
 - dynamic survey construction
 - non-refreshing result POST
 - frontend user input validation
-
-## upcoming (in order)
 - SQL connecting
 - proper SQL database schema
+
+## upcoming (in order)
+
 - generate GET data from SQL table
 - backend user input validation
 - insert valid input into database

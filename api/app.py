@@ -14,7 +14,7 @@ return current poll result via GET
 def poll():
 
     # TODO: find relevant dataset in database and return
-
+    dbWorker=DbWorks()
     # sample data structure with sample data
     dataPack = {
         "poll": {
@@ -58,7 +58,7 @@ def surv():
                   "op4_nothing": {
                       "dispMsg": "Not a fan of ice cream",
                       "inputType": "radio",
-                      "inputVal": "non"}
+                      "inputVal": "noth"}
               },
                  "questionReq": True
               }

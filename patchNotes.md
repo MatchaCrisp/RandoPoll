@@ -14,6 +14,8 @@ previous to this, main difficulty was not knowing the ordinal axis in d3, result
 
 ## December 26 2021: Cakes
 Holiday seasons are often the busiest, even during the pandemic. Being a hermit with most of his daily vitamin D quota fulfilled via supplements, I still exchanged many holiday greetings and gifts. Weather wasn't too bad either, overall a good day.
+A lot of trial and error today, trying to figure out the most intuitive and yet most information packed way to have the data
+finished POST to backend, coupled with simple frontend validation
 
 - resolved no form generated (wrong interpretation of survey data structure)
 - revised data structure 2 (to include necessary data per input)
@@ -26,6 +28,8 @@ Holiday seasons are often the busiest, even during the pandemic. Being a hermit 
 
 ## December 27 2021: Yer a lizard, 'arry
 Time flies like Harry on a broomstick
+The api splitting paves way for fetching only needed data in cases such as user already submitted, therefore does not need survey data
+reduces number of lines of code in /poll making it easier to read
 
 - split /poll api into 3: 
  - /poll (for only poll result at time of fetch)
@@ -36,6 +40,7 @@ Time flies like Harry on a broomstick
 
 ## December 28 2021: SQL
 How to store data of unknown format well into a RDBMS?
+Current solution: lump it into a JSON and just dump it in!
 
 - implement dbworks class as postgresql connector
 - stored all sensitive information in separate ini file (updated gitignore)
@@ -43,3 +48,15 @@ How to store data of unknown format well into a RDBMS?
 - TODO: gather table/row creating methods in dbworks into one
 - TODO: finish dbworks insert user input method
 - TODO: use actual data from SQL instead of dummy in app.py
+
+## December 29 2021: SQL yet again
+injection attacks and psycopg2...
+First problem was py strings being double quoted when directly referenced (solved with tuple)
+Second problem was single quoted column/tablenames (solved with AsIs)
+Third was trying to think where SQL injections might happen
+
+- gathered all initializing poll methods into one DbWorks.initializePoll()
+- tested and fixed all parsing issues by using psycopg2.extensions.AsIs for queries that need no quotes
+- patched all locations of possible SQL injection by ways of regex/psycopg2.extensions.quote_ident
+- working DbWorks.insertUserInput()
+- TODO: finally use actual SQL data in app.py
