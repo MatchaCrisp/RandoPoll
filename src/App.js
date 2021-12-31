@@ -76,7 +76,7 @@ const App =()=> {
     <div className="poll">
       <header className="header">
         <h1>RandoPoll</h1>
-        <a href="https://www.github.com"><i className="fab fa-github"></i></a>
+        <a href="https://github.com/MatchaCrisp/RandoPoll"><i className="fab fa-github"></i></a>
       </header>
       <Graph poll={poll} />
       <Survey surv={surv} setSubmiss={setSubmiss} submitStat={submiss}/>
