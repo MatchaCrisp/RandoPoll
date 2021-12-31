@@ -18,18 +18,17 @@ const App =()=> {
   useEffect(() => {
     // fetch poll data
     fetch('/poll').then(res => res.json()).then(({poll}) => {
-      console.log(poll)
+
       const newPoll = {};
       newPoll.pollId=poll.pollId;
       newPoll.title=poll.title;
       newPoll.colors=poll.colors;
       const newRes={}
       for (const resKey in poll.res){
-        console.log(resKey)
-        console.log(poll.glossary[resKey],poll.res[resKey])
+
         newRes[poll.glossary[resKey]]=poll.res[resKey];
       }
-      console.log(newRes)
+
       newPoll.res=newRes;
       newPoll.type=poll.type;
       setPoll(newPoll);
@@ -53,18 +52,17 @@ const App =()=> {
     // case of successful submission AKA refetch poll results
     else if (submiss === 1) {
       fetch('/poll').then(res => res.json()).then(({ poll }) => {
-        console.log(poll)
+
         const newPoll = {};
         newPoll.pollId = poll.pollId;
         newPoll.title = poll.title;
         newPoll.colors = poll.colors;
         const newRes = {}
         for (const resKey in poll.res) {
-          console.log(resKey)
-          console.log(poll.glossary[resKey], poll.res[resKey])
+
           newRes[poll.glossary[resKey]] = poll.res[resKey];
         }
-        console.log(newRes)
+
         newPoll.res = newRes;
         newPoll.type = poll.type;
         setPoll(newPoll);

@@ -22,7 +22,7 @@ const Graph =(props)=>{
         for (const key in props.poll.res){
             items.push([key,props.poll.res[key],props.poll.colors[key]]);
         }
-        console.log("sending data to ", props.poll.type)
+
         graph = React.createElement(
             graphs[props.poll.type],
             {head:head,items:items});

@@ -129,7 +129,7 @@ const Survey=({surv, submitStat, setSubmiss})=>{
                 fetch('/submitSurv', userData)
                     .then(response => response.json())
                     .then(data => {
-                        console.log(data);
+
                         if (data["registered"] === true) {
                             setSubmiss(1);
                         }
