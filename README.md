@@ -1,5 +1,7 @@
 # randoPoll.com
-
+src code: https://github.com/MatchaCrisp/RandoPoll
+live url: https://rando-poll.herokuapp.com/
+youtube presentation: https://youtu.be/FFVZm5VO7fM
 ## Introduction
 This is a web application with the goal of publishing a survey every week, alongside the survey results at that particular moment in time.
 
