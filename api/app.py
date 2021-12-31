@@ -2,7 +2,7 @@ from flask import Flask, request
 app = Flask(__name__)
 from DbWorks import DbWorks
 from datetime import datetime
-import re
+
 """
 Backend API
 complete sanitization and validation of user input from POST
@@ -29,6 +29,7 @@ glossary={
         "Not a fan of ice cream":"#272643"
     }
 }
+
 @app.route('/poll', methods=["GET"])
 def poll():
 
