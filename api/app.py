@@ -32,7 +32,7 @@ glossary={
 @app.route('/poll', methods=["GET"])
 def poll():
 
-    dbWorker=DbWorks('./database.ini','postgresql')
+    dbWorker=DbWorks()
     try:
         dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary["pollTabSchema"]["main"])
         if dataPack == None:
@@ -51,7 +51,7 @@ def poll():
 
 @app.route('/surv', methods=['GET'])
 def surv():
-    dbWorker=DbWorks('./database.ini','postgresql')
+    dbWorker=DbWorks()
     try:
         dataPack=dbWorker.getPollSurvMain(datetime.today().strftime('%Y-%m-%d'))
         if dataPack == None:
@@ -69,7 +69,7 @@ def submitSurv():
         # validation done at dbworks
         print(request.json)
         
-        dbWorker=DbWorks('./database.ini','postgresql')
+        dbWorker=DbWorks()
         try:
             # dbworks validates pollid, and each response key/value pair
             dbWorker.insertUserInput(request.json["data"])

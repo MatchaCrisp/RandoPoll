@@ -3,20 +3,19 @@ from config import config
 import re
 import json
 from psycopg2.extensions import AsIs,quote_ident
-from datetime import datetime
-
 
 class DbWorks:
     # establish connection to database described in config
-    def __init__(self,filename='./database.ini', section='postgresql'):
+    def __init__(self):
         self.conn=None
         self.cur=None
         try:
-            params=config(filename,section)
+            DATABASE_URL='postgres://fhfowpfvftednf:e589aac2b9c183f4d3353634d49e0005a916a68b84b1bd9b883d68a296d0f000@ec2-18-211-185-154.compute-1.amazonaws.com:5432/d1upk6nq13jqdr'
+
             print("testing connection")
 
             # establish connection and set cursor
-            self.conn=psycopg2.connect(**params)
+            self.conn=psycopg2.connect(DATABASE_URL,sslmode='require')
             self.cur=self.conn.cursor()
             print("connection successful")
         except (Exception, psycopg2.DatabaseError) as error:
@@ -296,5 +295,4 @@ poll1={'pollTitle':'chocolate_vs_vanilla_ice_cream',
            }
        ]
     }
-# worker.initializePoll(poll1)
 
