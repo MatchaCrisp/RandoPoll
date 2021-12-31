@@ -11,7 +11,7 @@ const Graph =(props)=>{
     // create proper graph based on required poll type dynamically
     let graph;
     if (!props.poll.type){
-        graph = <div>Loading</div>
+        graph = <img src="https://raw.githubusercontent.com/MatchaCrisp/RandoPoll/main/src/img/loading.gif" alt="loading" />
     }
     else {
         // graph header

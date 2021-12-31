@@ -59,7 +59,7 @@ const Survey=({surv, submitStat, setSubmiss})=>{
 
     // displays when submission in progress
     const submitInProg=()=>{
-        return <img src="https://raw.githubusercontent.com/MatchaCrisp/RandomQuote.github.io/main/src/img/loading.gif" alt="loading" />
+        return <img src="https://raw.githubusercontent.com/MatchaCrisp/RandoPoll/main/src/img/loading.gif" alt="loading" />
     }
 
     // no submissions so far AKA the form itself

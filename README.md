@@ -1,4 +1,4 @@
-# weeklyPoll.com
+# randoPoll.com
 
 ## Introduction
 This is a web application with the goal of publishing a survey every week, alongside the survey results at that particular moment in time.
@@ -29,8 +29,6 @@ This is a web application with the goal of publishing a survey every week, along
 - frontend styling
 
 ## upcoming (in order)
-
-
 - hosting on heroku
 - admin portal for making surveys
 - prevent repeat submission via cookie/social media
