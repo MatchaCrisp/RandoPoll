@@ -9,19 +9,32 @@ import {useState, useEffect} from 'react';
 
 //returns object
 //return order: gWidth:graphWidth, gHeight:graphHeight, barW:barWidth, barSep:barSeparator, barH:barHeightMult
-const useDim=({xRatio,yRatio})=>{
+const useDim=({xRatio,yRatio,xMax,yMax,xMin,yMin})=>{
     //grab dimensions of viewport
-    const getDim=(xRat,yRat)=>{
+    const getDim=(xRat,yRat,xMax=-1,yMax=-1,xMin=-1,yMin=-1)=>{
+      console.log(xRat,yRat,xMax)
       const {innerWidth:windW,innerHeight:windH}=window;
-      const gW=Math.round(windW*xRat);
-      const gH=Math.round(windH*yRat);
-
-      return {gWidth:gW<600?600:gW,gHeight:gH<400?400:gH};
+      let gW=Math.round(windW*xRat);
+      let gH=Math.round(windH*yRat);
+      if (xMax !== -1 && xMax < gW){
+        gW=xMax;
+      }
+      if (xMin !== -1 && xMin > gW){
+        gW=xMin;
+      }
+      if (yMax !== -1 && yMax < gH){
+        gH=yMax;
+      }
+      if (yMin !== -1 && yMin > gH){
+        gH=yMin;
+      }
+      console.log(gW,gH);
+      return {gWidth:gW,gHeight:gH};
     }
 
 
     const handleResize=()=>{
-      setDim(getDim(xRatio,yRatio));
+      setDim(getDim(xRatio,yRatio,xMax,yMax,xMin,yMin));
     }
 
 

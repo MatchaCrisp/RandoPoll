@@ -60,3 +60,15 @@ Third was trying to think where SQL injections might happen
 - patched all locations of possible SQL injection by ways of regex/psycopg2.extensions.quote_ident
 - working DbWorks.insertUserInput()
 - TODO: finally use actual SQL data in app.py
+
+## December 30 2021: v0.5 MVP
+found a bug in vbar that traced back to me not thinking through how d3.scale() works. It defines the max and min of x/y
+based on the size of the canvas and the given dataset. Meaning for a barchart, the returned value does not denote height, it denotes
+the starting drawing point of the bars.
+
+- finished DbWorks.getPollResMain() to return a well-formed package of data for flask backend
+- finished DbWorks.getPollSurvMain() to return a well-formed pckage of data for flask backend
+- tweaked DbWorks.insertUserInput()
+- linked flask fully to postgres through psycopg2
+- added frontend styling
+- installed sass

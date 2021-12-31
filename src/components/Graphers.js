@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 import { useRef } from "react";
-import '../styleSheets/vbargraph.css';
+import '../styleSheets/vbargraph.scss';
 import useDim from "../hooks/useDim";
 
 export const VBar=(props)=>{
@@ -8,11 +8,11 @@ export const VBar=(props)=>{
     //         items: [bar-name, bar-value]}
 
     // max graph size is 80% of viewport width/height (TODO: ADJUST TO MAX/MIN )
-    const {gWidth,gHeight}=useDim({xRatio:0.8,yRatio:0.8});
+    const {gWidth,gHeight}=useDim({xRatio:0.4,yRatio:0.4,xMax:800,yMax:600,xMin:400,yMin:300});
     const wid = gWidth;
     const hei = gHeight;
     console.log("graphing vertical bar graph")
-
+    console.log("received",props.items)
     // where to attach svg
     const graphNode = useRef(null);
 
@@ -59,13 +59,14 @@ export const VBar=(props)=>{
                         .append("rect")
                         .attr("x", (d,i)=>xScale(d[0]))
                         .attr("y", (d,i)=>{
-                            return hei-downPadding-yScale(d[1]);
+                            return yScale(d[1]);
                         })
                         .attr("width", ()=>xScale.bandwidth())
                         .attr("height", (d,i)=>{
-                            return yScale(d[1]);
+                            return hei-downPadding-yScale(d[1]);
                         })
                         .attr("class","bar")
+                        .attr("fill",(d,i)=>d[2])
                         
     // bar tooltip (TODO: style)
     bars.append("title")
@@ -114,9 +115,9 @@ export const VBar=(props)=>{
             .call(gridLineBase)
             .attr("transform",`translate(${xPadding},0)`);
 
-
+    console.log("finish graph")
     return(
-        <div ref={graphNode}>
+        <div className="vBar" ref={graphNode}>
         </div>
     )
 }

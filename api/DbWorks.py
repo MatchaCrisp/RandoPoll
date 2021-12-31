@@ -3,14 +3,19 @@ from config import config
 import re
 import json
 from psycopg2.extensions import AsIs,quote_ident
+from datetime import datetime
+
+
 class DbWorks:
     # establish connection to database described in config
-    def __init__(self):
+    def __init__(self,filename='./database.ini', section='postgresql'):
         self.conn=None
         self.cur=None
         try:
-            params=config()
+            params=config(filename,section)
             print("testing connection")
+
+            # establish connection and set cursor
             self.conn=psycopg2.connect(**params)
             self.cur=self.conn.cursor()
             print("connection successful")
@@ -27,24 +32,30 @@ class DbWorks:
 
     # print version of connected db
     def dbInfo(self):
-        if self.conn is not None and self.cur is not None:
+        # make sure connection is healthy
+        if self.conn is None or self.cur is None:
+            raise RuntimeError("database connection not established")
+        try:
             self.cur.execute('SELECT version()')
             version = self.cur.fetchone()
             return version
-        else:
-            return None
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
 
     # print schema of connected db
     def schema(self):
-        if self.conn is not None and self.cur is not None:
+        # make sure connection is healthy
+        if self.conn is None or self.cur is None:
+            raise RuntimeError("database connection not established")
+        try:
             self.cur.execute(
                 'SELECT table_name FROM information_schema.tables WHERE table_schema = \'public\' ORDER BY tables.table_name')
             schema=self.cur.fetchall()
             return schema
-        else:
-            return None
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
 
-    # TODO: one exposed API for doing all poll initializing
+    # one exposed API for doing all poll initializing
     def initializePoll(self,pollObj):
         pollTitle=pollObj["pollTitle"]
         pollTab=pollObj["pollTab"]
@@ -58,10 +69,12 @@ class DbWorks:
 
         answers=[]
         questions=[] 
+        # gather relevant info for res_table into answers, and relevant info for question_table into questions
         for quest in pollObj["pollQuestions"]:
             # input validations
             if "inputName" not in quest or "returnType" not in quest or "isReq" not in quest or "options" not in quest:
                 raise KeyError("incorrect dict format")
+            # TODO: more specific validations
             if quest["inputName"]==None or quest["returnType"]==None or quest["isReq"]==None or quest["options"]==None:
                 raise ValueError("incorrect input/input format")
             answer={"inputName":quest["inputName"],
@@ -110,6 +123,7 @@ class DbWorks:
             sqlNewQuestions="INSERT INTO %s (name, options, is_req) VALUES "
             newQuestParam=[]
             newQuestParam.append(AsIs(survTab))
+            # for each additional question add another row
             for question in questions:
                 newQuestion="(%s, %s, %s), "
                 sqlNewQuestions+=newQuestion
@@ -128,10 +142,10 @@ class DbWorks:
             print("finish")
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
-          
-    # TODO: update poll_res based on valid input
+
     # validate input here again
     def insertUserInput(self,input):
+        # validate pollId
         if "pollId" not in input:
             raise ValueError("pollId not found")
 
@@ -154,11 +168,19 @@ class DbWorks:
             insertQueryParam.append(AsIs(pollTable))
             # loop over every key to grab column name
             for col in input:
+                # validate format of col (\w)
+                if not re.match("^[\w\d]+$", col):
+                    # case of special characters getting in
+                    raise ValueError("incorrect column format")
                 insertQuery+="%s, "
                 insertQueryParam.append(AsIs(col))
             insertQuery=insertQuery[:-2]
             insertQuery+=") VALUES ("
             for col in input:
+                # validate col data
+                if not re.match("^[\w\d]+$",input[col]):
+                    # case of special characters getting in
+                    raise ValueError("incorrect column data format")
                 insertQuery+="%s, "
                 insertQueryParam.append(input[col])
             insertQuery=insertQuery[:-2]
@@ -169,6 +191,7 @@ class DbWorks:
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
 
+    # only used to start new polls table 
     def initPoll(self):
         pollQ="CREATE TABLE IF NOT EXISTS polls (poll_id SERIAL PRIMARY KEY, poll_table TEXT NOT NULL, surv_table TEXT NOT NULL, poll_title TEXT NOT NULL, poll_start DATE NOT NULL, poll_end DATE NOT NULL);"
         # make sure connection is healthy
@@ -180,11 +203,82 @@ class DbWorks:
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
 
-    def giveCur(self):
+    # gives cursor away for program to do own query (TODO: test)
+    def getCur(self):
         return self.cur
-worker=DbWorks()
 
-jinga={'pollTitle':'chocolate_vs_vanilla_ice_cream',
+    # returns dataPack formed to the order of backend /poll
+    def getPollResMain(self,date,aggCol):
+        # input validation
+        if not re.match("^\d{4}-\d{2}-\d{2}$",date):
+            raise ValueError("incorrect date/date format")
+        if not re.match("^[\w]+$",aggCol):
+            raise ValueError("incorrect column name/format")
+        try:
+            dataPack={
+                "poll":{
+                    "pollId":"",
+                    "title":"",
+                    "res":{}
+                }
+            }
+            # make query to select the correct pollTable
+            pollTabQuery="SELECT poll_id, poll_title, poll_table FROM polls WHERE to_date(%s,'YYYY-MM-DD') >= poll_start AND to_date(%s, 'YYYY-MM-DD') <= poll_end;"
+            self.cur.execute(pollTabQuery,(date,date,))
+            qRes = self.cur.fetchone()
+            if qRes == None:
+                return None
+            dataPack["poll"]["pollId"]=qRes[0]
+            dataPack["poll"]["title"]=qRes[1]
+            pollTab=qRes[2]
+            resQuery="SELECT %s, COUNT(%s) FROM %s GROUP BY %s;"
+            self.cur.execute(resQuery,(AsIs(aggCol), AsIs(aggCol), AsIs(pollTab), AsIs(aggCol),))
+            qpRes = json.loads(json.dumps(self.cur.fetchall()))
+
+            for res in qpRes:
+                dataPack["poll"]["res"][res[0]]=res[1]
+            return dataPack
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+    
+    # returns dataPack formed to the order of backend /surv
+    def getPollSurvMain(self,date):
+        # input validation
+        if not re.match("^\d{4}-\d{2}-\d{2}$",date):
+            raise ValueError("incorrect date/date format")
+
+        try:
+            dataPack={
+                "surv":{
+                    "pollId":"",
+                    "title":"",
+                    "questions":[]
+                }
+            }
+            # make query to select the correct pollTable
+            pollTabQuery="SELECT poll_id, poll_title, surv_table FROM polls WHERE to_date(%s,'YYYY-MM-DD') >= poll_start AND to_date(%s, 'YYYY-MM-DD') <= poll_end;"
+            self.cur.execute(pollTabQuery,(date,date,))
+            qRes = self.cur.fetchone()
+            if qRes == None:
+                return None
+            dataPack["surv"]["pollId"]=qRes[0]
+            dataPack["surv"]["title"]=qRes[1]
+            survTab=qRes[2]
+            resQuery="SELECT name, options, is_req FROM %s;"
+            self.cur.execute(resQuery,(AsIs(survTab),))
+
+            for row in self.cur:
+                print(row)
+                question={"questionName":row[0],
+                          "questionOptions":row[1],
+                          "questionReq":row[2]}
+                dataPack["surv"]["questions"].append(question)
+            print(dataPack)
+            return dataPack
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+
+poll1={'pollTitle':'chocolate_vs_vanilla_ice_cream',
        'pollTab':'fav_cream_res',
        'survTab':'fav_cream_quest',
        'pollStart':'2021-12-29',
@@ -202,4 +296,5 @@ jinga={'pollTitle':'chocolate_vs_vanilla_ice_cream',
            }
        ]
     }
-# worker.initializePoll(jinga)
+# worker.initializePoll(poll1)
+

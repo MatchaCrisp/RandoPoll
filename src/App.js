@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Graph from './components/Graph';
 import Survey from './components/Survey';
+import './styleSheets/App.scss';
 /* 
   Wrapper that encapsulates 2 functional components
   receives current poll JSON and renders header, <graph />, <survey />, footer
@@ -17,7 +18,15 @@ const App =()=> {
       const newPoll = {};
       newPoll.pollId=poll.pollId;
       newPoll.title=poll.title;
-      newPoll.res=poll.res;
+      newPoll.colors=poll.colors;
+      const newRes={}
+      for (const resKey in poll.res){
+        console.log(resKey)
+        console.log(poll.glossary[resKey],poll.res[resKey])
+        newRes[poll.glossary[resKey]]=poll.res[resKey];
+      }
+      console.log(newRes)
+      newPoll.res=newRes;
       newPoll.type=poll.type;
       setPoll(newPoll);
     });
@@ -36,12 +45,13 @@ const App =()=> {
   return (
     <div className="poll">
       <header className="header">
-        poll every day
+        <h1>RandoPoll</h1>
+        <a href="https://www.github.com"><i className="fab fa-github"></i></a>
       </header>
       <Graph poll={poll} />
       <Survey surv={surv} />
       <footer className="footer">
-        footer
+
       </footer>
     </div>
   );

@@ -1,6 +1,5 @@
 .bar {
   stroke: 1px solid white;
-  fill:antiquewhite;
 }
   
 .bar:hover {
@@ -10,6 +9,7 @@
 svg {
   border: 1px solid black;
   font-size:1rem;
+
 }
 
 .grid .tick {
@@ -21,4 +21,9 @@ svg {
 
 .grid path {
   stroke-width: 0;
+}
+
+.vBar{
+  width:66%;
+  margin:0 auto;
 }

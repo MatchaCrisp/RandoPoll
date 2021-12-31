@@ -1,6 +1,6 @@
 import React from "react";
 import {VBar, HBar} from "./Graphers";
-
+import '../styleSheets/Graph.scss';
 // renders the correct graph based on type passed in by JSON
 const Graph =(props)=>{
     const graphs={
@@ -22,7 +22,7 @@ const Graph =(props)=>{
         // graph option and votes pair
         const items=[];
         for (const key in props.poll.res){
-            items.push([key,props.poll.res[key]]);
+            items.push([key,props.poll.res[key],props.poll.colors[key]]);
         }
         console.log("sending data to ", props.poll.type)
         graph = React.createElement(
@@ -31,7 +31,7 @@ const Graph =(props)=>{
     }
     
     return (
-        <div>
+        <div className="graphContainer">
             {graph}
         </div>
         

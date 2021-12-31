@@ -1,6 +1,8 @@
 from flask import Flask, request
 app = Flask(__name__)
 from DbWorks import DbWorks
+from datetime import datetime
+import re
 """
 Backend API
 complete sanitization and validation of user input from POST
@@ -9,74 +11,69 @@ handle invalid submission gracefully
 handles only approved api requests via API_KEY
 return current poll result via GET
 """
-
+glossary={
+    "type":"vbar",
+    "pollTabSchema":{
+        "main":"fav_cream"
+    },
+    "dispMsgs":{
+    "vani":"Vanilla",
+    "choc":"Chocolate",
+    "othe":"Other flavor",
+    "noth":"Not a fan of ice cream"
+    },
+    "barColors":{
+        "Vanilla":"#fdf6f6",
+        "Chocolate":"#857063",
+        "Other flavor":"#FFC0CB",
+        "Not a fan of ice cream":"#272643"
+    }
+}
 @app.route('/poll', methods=["GET"])
 def poll():
 
-    # TODO: find relevant dataset in database and return
-    dbWorker=DbWorks()
-    # sample data structure with sample data
-    dataPack = {
-        "poll": {
-            "pollId": "1",
-            "title": "Vanilla or Chocolate Ice Cream?",
-            "type": "vbar",
-            "res": {
-                    "Vanilla": "12",
-                    "Chocolate": "11",
-                    "Other flavor": "5",
-                    "Not a fan of ice cream": "3"
-            }
+    dbWorker=DbWorks('./database.ini','postgresql')
+    try:
+        dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary["pollTabSchema"]["main"])
+        if dataPack == None:
+            return None
+        dataPack["poll"]["type"]=glossary["type"]
+        dataPack["poll"]["title"]=dataPack["poll"]["title"].replace("_", " ")
+        dataPack["poll"]["glossary"]=glossary["dispMsgs"]
+        dataPack["poll"]["colors"]=glossary["barColors"]
 
-        }
-    }
-    return dataPack
+        return dataPack
+    except:
+        return None
+
 
         
 
 @app.route('/surv', methods=['GET'])
 def surv():
-    dataPack = {
-        "surv":{
-            "pollId": "1",
-            "title": "Vanilla or Chocolate Ice Cream?",
-            "questions": [
-             {"questionName": "fav_cream",
-              "questionOptions": {
-                  "op1_vanilla": {
-                      "dispMsg": "Vanilla",
-                      "inputType": "radio",
-                      "inputVal": "vani"},
-                  "op2_chocolate": {
-                      "dispMsg": "Chocolate",
-                      "inputType": "radio",
-                      "inputVal": "choc"},
-                  "op3_other": {
-                      "dispMsg": "Other flavor",
-                      "inputType": "radio",
-                      "inputVal": "othe"},
-                  "op4_nothing": {
-                      "dispMsg": "Not a fan of ice cream",
-                      "inputType": "radio",
-                      "inputVal": "noth"}
-              },
-                 "questionReq": True
-              }
-         ]}
-    }
-
-    return dataPack
+    dbWorker=DbWorks('./database.ini','postgresql')
+    try:
+        dataPack=dbWorker.getPollSurvMain(datetime.today().strftime('%Y-%m-%d'))
+        if dataPack == None:
+            return None
+        dataPack["surv"]["title"]=dataPack["surv"]["title"].replace("_", " ")
+        print(dataPack,"flask")
+        return dataPack
+    except:
+        return None
 
 
 @app.route('/submitSurv', methods=['GET','POST'])
 def submitSurv():
     if request.method=='POST':
-        # TODO: sanitize and validate user input
+        # validation done at dbworks
         print(request.json)
         
-        # 1: connect to database and fetch relevant datapack 
-        # TODO: return relevant error message in case of wrong input
-
-        # TODO: return affirmative message with valid input
-        return {"registered":True}
+        dbWorker=DbWorks('./database.ini','postgresql')
+        try:
+            # dbworks validates pollid, and each response key/value pair
+            dbWorker.insertUserInput(request.json["data"])
+            return {"registered":True}
+        except:
+            return {"registered":False}
 

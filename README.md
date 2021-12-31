@@ -22,13 +22,15 @@ This is a web application with the goal of publishing a survey every week, along
 - frontend user input validation
 - SQL connecting
 - proper SQL database schema
-
-## upcoming (in order)
-
 - generate GET data from SQL table
 - backend user input validation
 - insert valid input into database
 - submission progress visual cue
+- frontend styling
+
+## upcoming (in order)
+
+
 - hosting on heroku
 - admin portal for making surveys
 - prevent repeat submission via cookie/social media
