@@ -72,3 +72,9 @@ the starting drawing point of the bars.
 - linked flask fully to postgres through psycopg2
 - added frontend styling
 - installed sass
+
+## December 31 2021: v1.0 production
+
+- lifted submissionStatus state up grom survey.js to enable auto refresh poll result
+- added auto refresh poll result useeffect for successful form submission
+- added custom flavicon

@@ -11,18 +11,12 @@ export const VBar=(props)=>{
     const {gWidth,gHeight}=useDim({xRatio:0.4,yRatio:0.4,xMax:800,yMax:600,xMin:400,yMin:300});
     const wid = gWidth;
     const hei = gHeight;
-    console.log("graphing vertical bar graph")
-    console.log("received",props.items)
+
     // where to attach svg
     const graphNode = useRef(null);
 
     // **   graph paddings   **
-    // padding on both left and right side of graph
-    const xPadding = 50;
-    // padding on bottom of graph
-    const downPadding = 50;
-    // padding on top of graph
-    const upPadding = 100;
+    const paddings={left:50,up:100,right:50,down:50};
 
     // first clear any svg present in the page
     d3.select("svg").remove();
@@ -34,13 +28,13 @@ export const VBar=(props)=>{
                         .attr("width",wid);
     
     // **   y scale items   **                 
-    // find max/min values of the given dataset
+    // find max values of the given dataset
     const graphMax = d3.max(props.items,(d,i)=>parseFloat(d[1]));
-    const graphMin = d3.min(props.items, (d,i)=>parseFloat(d[1]));
-    // make a 0-graphmax yscale that plots 0 to (hei-downpadding) and graphmax to (uppadding)
+
+    // make a 0-graphmax yscale that plots 0 to (hei-paddings.down) and graphmax to (paddings.up)
     const yScale = d3.scaleLinear()
                         .domain([0, graphMax])
-                        .range([hei-downPadding,upPadding]);
+                        .range([hei-paddings.down,paddings.up]);
 
     // **   x scale items   **
     // ordinal graph tick labels
@@ -48,7 +42,7 @@ export const VBar=(props)=>{
     // ordinal graph scale with band (TODO: make padding conditional on how big each band would be)
     const xScale = d3.scaleBand()
                     .domain(xAxisLabels)
-                    .range([xPadding,wid-xPadding])
+                    .range([paddings.left,wid-paddings.right])
                     .paddingOuter([0.1])
                     .paddingInner([0.2]);
 
@@ -63,7 +57,7 @@ export const VBar=(props)=>{
                         })
                         .attr("width", ()=>xScale.bandwidth())
                         .attr("height", (d,i)=>{
-                            return hei-downPadding-yScale(d[1]);
+                            return hei-paddings.down-yScale(d[1]);
                         })
                         .attr("class","bar")
                         .attr("fill",(d,i)=>d[2])
@@ -76,9 +70,10 @@ export const VBar=(props)=>{
     // make axis according to x ordinal scale
     const xAxis = d3.axisBottom()
                     .scale(xScale);
+
     // translate down to origin
     svgCanv.append("g")
-            .attr("transform",`translate(0,${hei-downPadding})`)
+            .attr("transform",`translate(0,${hei-paddings.down})`)
             .call(xAxis);
 
     // **   y axis  **
@@ -89,13 +84,13 @@ export const VBar=(props)=>{
                     
     // translate right to origin
     svgCanv.append("g")
-            .attr("transform", `translate(${xPadding},0)`)
+            .attr("transform", `translate(${paddings.left},0)`)
             .call(yAxis);
 
     // **   graph title   **
     svgCanv.append("text")
             .attr("x",wid/2)
-            .attr("y",upPadding/2)
+            .attr("y",paddings.up/2)
             .attr("text-anchor","middle")
             .style("font-size","24px")
             .style("text-decoration","underline")
@@ -107,15 +102,14 @@ export const VBar=(props)=>{
     const gridLineBase=d3.axisLeft()
                         .scale(yScale)
                         .ticks(2)
-                        .tickSize((-wid+2*xPadding),0,0)
+                        .tickSize((-wid+paddings.left+paddings.right),0,0)
                         .tickFormat("");
     
     svgCanv.append("g")
             .attr("class","grid")
             .call(gridLineBase)
-            .attr("transform",`translate(${xPadding},0)`);
+            .attr("transform",`translate(${paddings.left},0)`);
 
-    console.log("finish graph")
     return(
         <div className="vBar" ref={graphNode}>
         </div>
@@ -127,7 +121,6 @@ export const HBar=(props)=>{
 
     return(
         <div>
-            jinga
         </div>
     )
 }

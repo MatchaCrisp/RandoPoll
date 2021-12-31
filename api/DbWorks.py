@@ -92,7 +92,7 @@ class DbWorks:
         try:
             # insert new row in polls to indicate new poll start
             sqlNewPoll="INSERT INTO polls (poll_table, surv_table, poll_title, poll_start, poll_end) VALUES (%s, %s, %s, %s, %s);"
-            print(sqlNewPoll)
+
             newPollParam=[pollTab, survTab, pollTitle, pollStart, pollEnd]
             self.cur.execute(sqlNewPoll, newPollParam)
 
@@ -111,12 +111,12 @@ class DbWorks:
             sqlNewPollRes=sqlNewPollRes[:-2]
             # add finish to query
             sqlNewPollRes+=");"
-            print(sqlNewPollRes)
+
             self.cur.execute(sqlNewPollRes,newPollResParam)
 
             # make new poll question table
             sqlNewPollQuest="CREATE TABLE IF NOT EXISTS %s (que_id SERIAL PRIMARY KEY, name TEXT NOT NULL, options JSONB NOT NULL, is_req BOOLEAN NOT NULL);"
-            print(sqlNewPollQuest)
+
             self.cur.execute(sqlNewPollQuest,(AsIs(survTab),))
 
             # insert each question requirement into new poll question table
@@ -133,13 +133,13 @@ class DbWorks:
                 newQuestParam.append('TRUE' if question['isReq'] else 'FALSE')
             sqlNewQuestions=sqlNewQuestions[:-2]
             sqlNewQuestions+=";"
-            print(sqlNewQuestions)
+
             self.cur.execute(sqlNewQuestions,newQuestParam)
 
             # commit
             self.conn.commit()
 
-            print("finish")
+
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
 
@@ -158,7 +158,7 @@ class DbWorks:
             del input["pollId"]
             # find correct table to insert
             pollTableQuery="SELECT poll_table FROM polls WHERE poll_id = %s;"
-            print(pollTableQuery)
+
             self.cur.execute(pollTableQuery,(pollId,))
             pollTable=self.cur.fetchone()[0]
             
@@ -185,7 +185,7 @@ class DbWorks:
                 insertQueryParam.append(input[col])
             insertQuery=insertQuery[:-2]
             insertQuery+=");"
-            print(insertQuery)
+
             self.cur.execute(insertQuery,insertQueryParam)
             self.conn.commit()
         except (Exception, psycopg2.DatabaseError) as error:
@@ -268,12 +268,12 @@ class DbWorks:
             self.cur.execute(resQuery,(AsIs(survTab),))
 
             for row in self.cur:
-                print(row)
+
                 question={"questionName":row[0],
                           "questionOptions":row[1],
                           "questionReq":row[2]}
                 dataPack["surv"]["questions"].append(question)
-            print(dataPack)
+
             return dataPack
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)

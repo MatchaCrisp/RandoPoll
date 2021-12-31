@@ -14,8 +14,6 @@ const Graph =(props)=>{
         graph = <div>Loading</div>
     }
     else {
-        console.log("received graph datas")
-        console.log(props)
         // graph header
         const head = props.poll.title;
 

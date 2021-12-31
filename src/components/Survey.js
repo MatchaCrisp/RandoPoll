@@ -1,49 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {useForm} from "react-hook-form";
 import '../styleSheets/Survey.scss';
-// TODO: integrate react-hook-form with dynamic form creation
+
 // form validation and POST back to flask backend
-const Survey=({surv})=>{
-    const [submitStat, setSubmitStat]=useState(0);
-    // surv = {title:title,  
-    //          questions:[{inputName:
-    //                  {opId:{
-    //                          dispMsg:display-msg,    
-    //                          inputType:input-type,
-    //                          inputVal:input-value
-    //                          }
-    //                   },
-    //             ...]
+const Survey=({surv, submitStat, setSubmiss})=>{
     const { register, handleSubmit} = useForm();
-    console.log("received survey data")
-    console.log(surv)
-    const jsx = [];
-    // process only when data fetched 
-    if (surv.questions){
-        // questions is an array containing question objects
-        // {questionName:name,
-        //  questionOptions:{op1_id:{dispMsg,inputType,inputVal},
-        // questionReq:bool}
-        // for each question object, destructure into each key
-        for (const {questionName, questionOptions, questionReq} of surv.questions){
-            for (const optionId in questionOptions){
-                // destructure each question id 
-                const {dispMsg,inputType,inputVal} = questionOptions[optionId];
-                const inp = <label
-                    htmlFor={optionId}
-                    key={`${optionId}Label`}><input
-                    type={inputType}
-                    id={optionId}
-                    key={`${optionId}Option`}
-                    {...register(questionName, { required: questionReq})}
-                    value={inputVal} />{dispMsg}
-                </label>
-
-                jsx.push(inp);
-
-            }
-        }
-    }
 
     // first validation check: check to see if all required questions are answered
     const firstValidify=(data)=>{
@@ -96,13 +57,54 @@ const Survey=({surv})=>{
         return (<div className="submitForm"><p className="submitMsg">Wrong form data!</p></div>)
     }
 
+    // displays when submission in progress
+    const submitInProg=()=>{
+        return <img src="https://raw.githubusercontent.com/MatchaCrisp/RandomQuote.github.io/main/src/img/loading.gif" alt="loading" />
+    }
+
     // no submissions so far AKA the form itself
     const noSubmission = () => {
+        // surv = {title:title,  
+        //          questions:[{inputName:
+        //                  {opId:{
+        //                          dispMsg:display-msg,    
+        //                          inputType:input-type,
+        //                          inputVal:input-value
+        //                          }
+        //                   },
+        //             ...]
+        const jsx = [];
+        // process only when data fetched 
+        if (surv.questions) {
+            // questions is an array containing question objects
+            // {questionName:name,
+            //  questionOptions:{op1_id:{dispMsg,inputType,inputVal},
+            // questionReq:bool}
+            // for each question object, destructure into each key
+            for (const { questionName, questionOptions, questionReq } of surv.questions) {
+                for (const optionId in questionOptions) {
+                    // destructure each question id 
+                    const { dispMsg, inputType, inputVal } = questionOptions[optionId];
+                    const inp = <label
+                        htmlFor={optionId}
+                        key={`${optionId}Label`}><input
+                            type={inputType}
+                            id={optionId}
+                            key={`${optionId}Option`}
+                            {...register(questionName, { required: questionReq })}
+                            value={inputVal} />{dispMsg}
+                    </label>
+
+                    jsx.push(inp);
+
+                }
+            }
+        }
+    
         return (<div className="submitForm">
             <h2 className="survTitle">{surv.title}</h2>
             <form onSubmit={handleSubmit((data) => {
                 // rudimentary data validation again
-                console.log("user input: ", data);
                 // validate all required questions are answered
                 // redundancy 
 
@@ -110,12 +112,10 @@ const Survey=({surv})=>{
                 if (!firstValidify(data)) {
                     return;
                 }
-                console.log("pass first check");
 
                 if (!secondValidify(data)) {
                     return;
                 }
-                console.log("pass second check")
                 // rudimentary input validation passed, posting to backend
                 // TODO: post
                 data["pollId"] = surv.pollId
@@ -124,18 +124,19 @@ const Survey=({surv})=>{
                     headers: { 'Content-type': 'application/json' },
                     body: JSON.stringify({ data })
                 };
+                setSubmiss(2);
                 // change into waiting state
                 fetch('/submitSurv', userData)
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
                         if (data["registered"] === true) {
-                            setSubmitStat(1);
+                            setSubmiss(1);
                         }
                         else {
-                            setSubmitStat(2);
+                            setSubmiss(3);
                             setTimeout(() => {
-                                setSubmitStat(0);
+                                setSubmiss(0);
                             }, 3000);
 
                         }
@@ -148,11 +149,15 @@ const Survey=({surv})=>{
             </form>
         </div>)
     } 
+
     // form only rendered when never submitted
     if (submitStat === 1){
         return submitted();
     }
     else if (submitStat === 2){
+        return submitInProg();
+    }
+    else if (submitStat === 3){
         return wrongSubmit();
     }
     else {
