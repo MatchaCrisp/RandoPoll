@@ -39,7 +39,7 @@ const useDim=({xRatio,yRatio,xMax,yMax,xMin,yMin})=>{
 
 
     //initialize to viewport size on open
-    const [dim,setDim]=useState(getDim(xRatio,yRatio));
+    const [dim,setDim]=useState(getDim(xRatio,yRatio,xMax,yMax,xMin,yMin));
     //add listener for resize on mount/remove on unmount
     useEffect(()=>{
       window.addEventListener('resize',handleResize);
