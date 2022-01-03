@@ -12,7 +12,6 @@ import {useState, useEffect} from 'react';
 const useDim=({xRatio,yRatio,xMax,yMax,xMin,yMin})=>{
     //grab dimensions of viewport
     const getDim=(xRat,yRat,xMax=-1,yMax=-1,xMin=-1,yMin=-1)=>{
-      console.log(xRat,yRat,xMax)
       const {innerWidth:windW,innerHeight:windH}=window;
       let gW=Math.round(windW*xRat);
       let gH=Math.round(windH*yRat);

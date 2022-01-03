@@ -19,10 +19,10 @@ export const VBar=(props)=>{
     const paddings={left:50,up:100,right:50,down:50};
 
     // first clear any svg present in the page
-    d3.select("svg").remove();
+    d3.selectAll("svg").remove();
 
     // attach svg to graphNode
-    const svgCanv = d3.select(graphNode.current)
+    const svgCanv = d3.selectAll(graphNode.current)
                         .append("svg")
                         .attr("height",hei)
                         .attr("width",wid);

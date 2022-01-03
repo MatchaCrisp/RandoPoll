@@ -58,7 +58,7 @@ def surv():
         if dataPack == None:
             return None
         dataPack["surv"]["title"]=dataPack["surv"]["title"].replace("_", " ")
-        print(dataPack,"flask")
+
         return dataPack
     except:
         return None
@@ -68,7 +68,6 @@ def surv():
 def submitSurv():
     if request.method=='POST':
         # validation done at dbworks
-        print(request.json)
         
         dbWorker=DbWorks()
         try:
