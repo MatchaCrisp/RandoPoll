@@ -202,10 +202,6 @@ class DbWorks:
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
 
-    # gives cursor away for program to do own query (TODO: test)
-    def getCur(self):
-        return self.cur
-
     # returns dataPack formed to the order of backend /poll
     def getPollResMain(self,date,aggCol):
         # input validation
@@ -295,4 +291,26 @@ poll1={'pollTitle':'chocolate_vs_vanilla_ice_cream',
            }
        ]
     }
+
+poll2={'pollTitle':'coffee_or_tea',
+       'pollTab':'coff_tea_res',
+       'survTab':'coff_tea_quest',
+       'pollStart':'2022-01-06',
+       'pollEnd':'2022-01-12',
+       'pollQuestions':[
+           {'inputName':'coff_tea',
+            'returnType':'TEXT',
+            'options':{
+                        'op1_coffee':{'dispMsg':'coffee','inputType':'radio','inputVal':'coff'},
+                        'op2_tea':{'dispMsg':'tea','inputType':'radio','inputVal':'tea'},
+                        'op3_nothing':{'dispMsg':'neither','inputType':'radio','inputVal':'noth'}
+                      },
+            'isReq':True
+           }
+       ]
+    }
+
+# worker=DbWorks()
+# 22-01-06 -> 22-01-12
+# worker.initializePoll(poll2)
 

@@ -11,7 +11,7 @@ handle invalid submission gracefully
 handles only approved api requests via API_KEY
 return current poll result via GET
 """
-glossary={
+glossary1={
     "type":"vbar",
     "pollTabSchema":{
         "main":"fav_cream"
@@ -30,18 +30,35 @@ glossary={
     }
 }
 
+glossary2={
+    "type":"vbar",
+    "pollTabSchema":{
+        "main":"coff_tea"
+    },
+    "dispMsgs":{
+    "coff":"Coffee",
+    "tea":"Tea",
+    "noth":"Neither"
+    },
+    "barColors":{
+        "Coffee":"#634832",
+        "Tea":"#b30000",
+        "Neither":"#FFC0CB"
+    }
+}
+
 @app.route('/poll', methods=["GET"])
 def poll():
 
     dbWorker=DbWorks()
     try:
-        dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary["pollTabSchema"]["main"])
+        dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary2["pollTabSchema"]["main"])
         if dataPack == None:
             return None
-        dataPack["poll"]["type"]=glossary["type"]
+        dataPack["poll"]["type"]=glossary2["type"]
         dataPack["poll"]["title"]=dataPack["poll"]["title"].replace("_", " ")
-        dataPack["poll"]["glossary"]=glossary["dispMsgs"]
-        dataPack["poll"]["colors"]=glossary["barColors"]
+        dataPack["poll"]["glossary"]=glossary2["dispMsgs"]
+        dataPack["poll"]["colors"]=glossary2["barColors"]
 
         return dataPack
     except:
