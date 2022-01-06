@@ -22,11 +22,12 @@ export const VBar=(props)=>{
     d3.selectAll("svg").remove();
 
     // attach svg to graphNode
-    const svgCanv = d3.selectAll(graphNode.current)
+    const svgCanv = d3.select(graphNode.current)
                         .append("svg")
                         .attr("height",hei)
                         .attr("width",wid);
     
+
     // **   y scale items   **                 
     // find max values of the given dataset
     const graphMax = d3.max(props.items,(d,i)=>parseFloat(d[1]));
@@ -39,6 +40,7 @@ export const VBar=(props)=>{
     // **   x scale items   **
     // ordinal graph tick labels
     const xAxisLabels=props.items.map((item)=>item[0]);
+
     // ordinal graph scale with band (TODO: make padding conditional on how big each band would be)
     const xScale = d3.scaleBand()
                     .domain(xAxisLabels)

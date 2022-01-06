@@ -120,9 +120,10 @@ patchnotes.md and design.md contains further details
 - insert valid input into database
 - submission progress visual cue
 - frontend styling
+- hosting on heroku
 
 ## upcoming (in order)
-- hosting on heroku
+
 - admin portal for making surveys
 - prevent repeat submission via cookie/social media
 - historical polls

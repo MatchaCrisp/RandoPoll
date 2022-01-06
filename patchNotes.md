@@ -78,3 +78,9 @@ the starting drawing point of the bars.
 - lifted submissionStatus state up grom survey.js to enable auto refresh poll result
 - added auto refresh poll result useeffect for successful form submission
 - added custom flavicon
+
+## Jan 6 2022: v1.1.1 poll2
+
+- new coffee vs tea poll
+- attempt fix at graph not rendering first time
+- code clean up/remove possible security threat of getcur

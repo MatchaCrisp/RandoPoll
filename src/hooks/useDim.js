@@ -27,7 +27,6 @@ const useDim=({xRatio,yRatio,xMax,yMax,xMin,yMin})=>{
       if (yMin !== -1 && yMin > gH){
         gH=yMin;
       }
-      console.log(gW,gH);
       return {gWidth:gW,gHeight:gH};
     }
 

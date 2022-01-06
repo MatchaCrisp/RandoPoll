@@ -24,11 +24,9 @@ const App =()=> {
       newPoll.title=poll.title;
       newPoll.colors=poll.colors;
       const newRes={}
-      for (const resKey in poll.res){
-
-        newRes[poll.glossary[resKey]]=poll.res[resKey];
+      for (const resKey in poll.glossary){
+        newRes[poll.glossary[resKey]]=(resKey in poll.res)?poll.res[resKey]:0;
       }
-
       newPoll.res=newRes;
       newPoll.type=poll.type;
       setPoll(newPoll);
@@ -58,9 +56,8 @@ const App =()=> {
         newPoll.title = poll.title;
         newPoll.colors = poll.colors;
         const newRes = {}
-        for (const resKey in poll.res) {
-
-          newRes[poll.glossary[resKey]] = poll.res[resKey];
+        for (const resKey in poll.glossary){
+          newRes[poll.glossary[resKey]]=(resKey in poll.res)?poll.res[resKey]:0;
         }
 
         newPoll.res = newRes;
