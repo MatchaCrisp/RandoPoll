@@ -84,3 +84,6 @@ the starting drawing point of the bars.
 - new coffee vs tea poll
 - attempt fix at graph not rendering first time
 - code clean up/remove possible security threat of getcur
+
+## Jan 14 2022: v1.1.2 poll2
+- skyrim player age poll

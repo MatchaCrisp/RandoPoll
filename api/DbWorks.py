@@ -310,7 +310,30 @@ poll2={'pollTitle':'coffee_or_tea',
        ]
     }
 
-# worker=DbWorks()
+poll3={'pollTitle':'skyim_player_age',
+       'pollTab':'skyrim_age_res',
+       'survTab':'skyrim_age_quest',
+       'pollStart':'2022-01-13',
+       'pollEnd':'2022-01-19',
+       'pollQuestions':[
+           {'inputName':'skyrim_age',
+            'returnType':'TEXT',
+            'options':{
+                        'op1_18':{'dispMsg':'under 18','inputType':'radio','inputVal':'18min'},
+                        'op2_30':{'dispMsg':'18 to 30','inputType':'radio','inputVal':'30min'},
+                        'op3_50':{'dispMsg':'30 to 50','inputType':'radio','inputVal':'50min'},
+                        'op3_65':{'dispMsg':'50 to 65','inputType':'radio','inputVal':'65min'},
+                        'op3_plus':{'dispMsg':'65 plus','inputType':'radio','inputVal':'plus'},
+                        'op3_noth':{'dispMsg':'neither','inputType':'radio','inputVal':'noth'}
+                      },
+            'isReq':True
+           }
+       ]
+    }
+
+worker=DbWorks()
 # 22-01-06 -> 22-01-12
 # worker.initializePoll(poll2)
 
+# 22-01-13 -> 22-01-19
+# worker.initializePoll(poll3)

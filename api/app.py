@@ -47,18 +47,41 @@ glossary2={
     }
 }
 
+glossary3={
+    "type":"vbar",
+    "pollTabSchema":{
+        "main":"skyrim_age"
+    },
+    "dispMsgs":{
+    "18min":"under 18",
+    "30min":"10 to 30",
+    "50min":"30 to 50",
+    "65min":"50 to 65",
+    "plus":"65 plus",
+    "noth":"don't play skyrim"
+    },
+    "barColors":{
+        "under 18":"#000000",
+        "10 to 30":"#303030",
+        "30 to 50":"606060",
+        "50 to 65":"#909090",
+        "65 plus":"#c0c0c0",
+        "Neither":"#F0F0F0"
+    }
+}
+
 @app.route('/poll', methods=["GET"])
 def poll():
 
     dbWorker=DbWorks()
     try:
-        dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary2["pollTabSchema"]["main"])
+        dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary3["pollTabSchema"]["main"])
         if dataPack == None:
             return None
-        dataPack["poll"]["type"]=glossary2["type"]
+        dataPack["poll"]["type"]=glossary3["type"]
         dataPack["poll"]["title"]=dataPack["poll"]["title"].replace("_", " ")
-        dataPack["poll"]["glossary"]=glossary2["dispMsgs"]
-        dataPack["poll"]["colors"]=glossary2["barColors"]
+        dataPack["poll"]["glossary"]=glossary3["dispMsgs"]
+        dataPack["poll"]["colors"]=glossary3["barColors"]
 
         return dataPack
     except:
