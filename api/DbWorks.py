@@ -331,9 +331,29 @@ poll3={'pollTitle':'skyim_player_age',
        ]
     }
 
-worker=DbWorks()
+poll4={'pollTitle':'is_pineapple_an_acceptable_pizza_topping',
+       'pollTab':'pine_piz_top_res',
+       'survTab':'pine_piz_top_quest',
+       'pollStart':'2022-01-20',
+       'pollEnd':'2022-02-20',
+       'pollQuestions':[
+           {'inputName':'pine_piz_top',
+            'returnType':'TEXT',
+            'options':{
+                        'op1_ye':{'dispMsg':'yes','inputType':'radio','inputVal':'yes'},
+                        'op2_no':{'dispMsg':'no','inputType':'radio','inputVal':'no'},
+                        'op3_noth':{'dispMsg':'noth','inputType':'radio','inputVal':'noth'}
+                      },
+            'isReq':True
+           }
+       ]
+    }
+# worker=DbWorks()
 # 22-01-06 -> 22-01-12
 # worker.initializePoll(poll2)
 
 # 22-01-13 -> 22-01-19
 # worker.initializePoll(poll3)
+
+# 22-01-20 -> 22-02-20
+# worker.initializePoll(poll4)

@@ -70,18 +70,35 @@ glossary3={
     }
 }
 
+glossary4={
+    "type":"vbar",
+    "pollTabSchema":{
+        "main":"pine_piz_top"
+    },
+    "dispMsgs":{
+    "yes":"Yes",
+    "no":"No",
+    "noth":"Do not care"
+    },
+    "barColors":{
+        "Yes":"#e6ae25",
+        "No":"#bb5511",
+        "Do not care":"#F0F0F0"
+    }
+}
+
 @app.route('/poll', methods=["GET"])
 def poll():
 
     dbWorker=DbWorks()
     try:
-        dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary3["pollTabSchema"]["main"])
+        dataPack=dbWorker.getPollResMain(datetime.today().strftime('%Y-%m-%d'), glossary4["pollTabSchema"]["main"])
         if dataPack == None:
             return None
-        dataPack["poll"]["type"]=glossary3["type"]
+        dataPack["poll"]["type"]=glossary4["type"]
         dataPack["poll"]["title"]=dataPack["poll"]["title"].replace("_", " ")
-        dataPack["poll"]["glossary"]=glossary3["dispMsgs"]
-        dataPack["poll"]["colors"]=glossary3["barColors"]
+        dataPack["poll"]["glossary"]=glossary4["dispMsgs"]
+        dataPack["poll"]["colors"]=glossary4["barColors"]
 
         return dataPack
     except:

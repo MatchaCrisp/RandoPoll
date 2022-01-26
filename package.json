@@ -1,6 +1,9 @@
 {
   "name": "poll-day",
-  "version": "1.1.2",
+  "author":"Junyan Ye",
+  "description":"Polls that users are welcome to participate in. Theh poll is updated at semi-regular intervals.",
+  "keywords":["survey"],
+  "version": "1.1.3",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.15.1",

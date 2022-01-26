@@ -67,14 +67,28 @@ const App =()=> {
     }
 
   },[submiss]);
+
+  const renderGraph=()=>{
+    if (!poll){
+      return <p>Oops! No graph data were found.</p>
+    }
+    return <Graph poll={poll} />
+  }
+
+  const renderSurvey=()=>{
+    if (!surv){
+      return <p>Oops! No survey questions were found</p>
+    }
+    return <Survey surv={surv} setSubmiss={setSubmiss} submitStat={submiss}/>
+  }
   return (
     <div className="poll">
       <header className="header">
         <h1>RandoPoll</h1>
         <a href="https://github.com/MatchaCrisp/RandoPoll" target="_blank" rel="noreferrer"><i className="fab fa-github"></i></a>
       </header>
-      <Graph poll={poll} />
-      <Survey surv={surv} setSubmiss={setSubmiss} submitStat={submiss}/>
+      {renderGraph()}
+      {renderSurvey()}
       <footer className="footer">
 
       </footer>

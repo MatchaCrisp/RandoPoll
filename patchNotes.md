@@ -87,3 +87,8 @@ the starting drawing point of the bars.
 
 ## Jan 14 2022: v1.1.2 poll2
 - skyrim player age poll
+
+## Jan 25 2022 v1.1.3 poll3
+- pineapple pizza topping poll
+- graceful handling of missing poll
+- attempt fix at graph not rendering first time
