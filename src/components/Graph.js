@@ -1,5 +1,10 @@
+// external
+// react
 import React from "react";
+// internal
+// components
 import {VBar, HBar} from "./Graphers";
+// stylesheet
 import '../styleSheets/Graph.scss';
 // renders the correct graph based on type passed in by JSON
 const Graph =(props)=>{

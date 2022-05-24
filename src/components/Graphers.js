@@ -1,6 +1,12 @@
+// external
+// d3js
 import * as d3 from "d3";
+// react
 import { useRef } from "react";
+// internal
+// stylesheet
 import '../styleSheets/vbargraph.scss';
+// hook
 import useDim from "../hooks/useDim";
 
 export const VBar=(props)=>{

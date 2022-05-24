@@ -1,5 +1,10 @@
+// external
+// react
 import React from 'react';
+// hook form
 import {useForm} from "react-hook-form";
+// internal
+// stylesheet
 import '../styleSheets/Survey.scss';
 
 // form validation and POST back to flask backend

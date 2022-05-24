@@ -1,6 +1,11 @@
+// external
+// react
 import React, { useState, useEffect } from 'react';
+// internal
+// components
 import Graph from './components/Graph';
 import Survey from './components/Survey';
+// stylesheet
 import './styleSheets/App.scss';
 /* 
   Wrapper that encapsulates 2 functional components
